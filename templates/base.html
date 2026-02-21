@@ -5,10 +5,7 @@
     <title>Good Drive</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 
@@ -22,13 +19,19 @@
         <div class="max-w-7xl mx-auto flex items-center justify-between px-8 py-5">
 
             <!-- Logo -->
-            <div class="flex items-center">
+            <div class="flex items-center gap-6">
                 <img src="/static/images/logo.png" 
                      alt="Good Drive Logo" 
                      class="h-12 w-auto object-contain">
+
+                <!-- About Instructor Link -->
+                <a href="#about-instructor" 
+                   class="hidden md:block text-white hover:text-[#FF2E88] transition duration-300">
+                   About Instructor
+                </a>
             </div>
 
-            <!-- Book Button (FIXED NUMBER) -->
+            <!-- Book Button -->
             <a href="https://wa.me/919947444475?text=Hi%20I%20want%20to%20book%20a%20driving%20session"
                target="_blank"
                class="bg-[#FF2E88] hover:bg-pink-600 text-white px-7 py-2.5 rounded-full font-semibold shadow-lg transition duration-300">
@@ -38,22 +41,19 @@
         </div>
     </nav>
 
-    <!-- Page Content -->
     <div class="pt-24">
         {% block content %}{% endblock %}
     </div>
 
     <!-- ================= FLOATING CHATBOT ================= -->
 
-    <div id="chatbot-container" class="fixed bottom-6 right-6 z-50">
+    <div class="fixed bottom-6 right-6 z-50">
 
-        <!-- Toggle Button -->
         <button onclick="toggleChat()"
             class="bg-[#FF2E88] w-16 h-16 rounded-full shadow-xl text-white text-2xl flex items-center justify-center">
             💬
         </button>
 
-        <!-- Chat Window -->
         <div id="chat-window"
             class="hidden mt-4 w-80 bg-[#111] rounded-xl shadow-2xl p-4 border border-[#D4AF37]/20">
 
@@ -74,55 +74,82 @@
                 Send
             </button>
 
-            <!-- WhatsApp fallback -->
             <a href="https://wa.me/919947444475"
                target="_blank"
                class="block mt-3 text-center text-[#FF2E88] underline text-sm">
-               Can't find answer? Chat on WhatsApp
+               Chat directly on WhatsApp
             </a>
 
         </div>
     </div>
 
-    <!-- Chatbot Script -->
+    <!-- ================= CHATBOT SCRIPT ================= -->
+
     <script>
+
+        let firstOpen = true;
+
         function toggleChat() {
-            document.getElementById("chat-window").classList.toggle("hidden");
+            const chatWindow = document.getElementById("chat-window");
+            chatWindow.classList.toggle("hidden");
+
+            const chatBox = document.getElementById("chat-box");
+
+            if (firstOpen && !chatWindow.classList.contains("hidden")) {
+                chatBox.innerHTML += `
+                <div class="text-[#FF2E88]">
+                    <strong>GoodDrive AI:</strong> 
+                    Hi 👋 Welcome to Good Drive. 
+                    I can help you with pricing, instructor details, address, session procedure and booking.
+                </div>`;
+                firstOpen = false;
+            }
         }
 
         function sendMessage() {
-            let inputField = document.getElementById("user-input");
-            let input = inputField.value.toLowerCase();
-            let chatBox = document.getElementById("chat-box");
+            const inputField = document.getElementById("user-input");
+            const input = inputField.value.toLowerCase().trim();
+            const chatBox = document.getElementById("chat-box");
 
-            if (!input.trim()) return;
+            if (!input) return;
 
             let response = "";
 
-            if (input.includes("price") || input.includes("cost") || input.includes("fee")) {
+            if (input.includes("hi") || input.includes("hello")) {
+                response = "Hi 👋 This is Good Drive. Ask me about pricing, instructor Yaseen, address, or session procedure.";
+            }
+
+            else if (input.includes("price") || input.includes("cost") || input.includes("fee")) {
                 response = "Pricing: ₹600 per hour OR ₹15000 monthly package.";
-            } 
+            }
+
             else if (input.includes("address") || input.includes("location") || input.includes("where")) {
                 response = "Address: Karimakkad, Thrikkakara, Edappally, Ernakulam, Kochi, Kerala 682021.";
             }
-            else if (input.includes("instructor") || input.includes("who") || input.includes("yaseen")) {
-                response = "Instructor Yaseen – 5+ years experience, 200+ trained drivers.";
+
+            else if (input.includes("instructor") || input.includes("yaseen")) {
+                response = "Instructor Yaseen has 5+ years experience and has trained 200+ drivers successfully.";
             }
+
+            else if (input.includes("procedure") || input.includes("session") || input.includes("how")) {
+                response = "Procedure: You share your home location. Instructor Yaseen will come to your home, pick you up, conduct the driving session, and drop you back safely.";
+            }
+
             else if (input.includes("book") || input.includes("schedule")) {
-                response = "Click the Book Now button above to book instantly.";
+                response = "Please click the Book Now button above or use WhatsApp to confirm your session.";
             }
+
             else {
-                response = "Please click the WhatsApp link below for detailed assistance.";
+                response = "For detailed assistance, please use the WhatsApp link below.";
             }
 
             chatBox.innerHTML += `<div><strong>You:</strong> ${input}</div>`;
-            chatBox.innerHTML += `<div class="text-[#FF2E88]"><strong>AI:</strong> ${response}</div>`;
+            chatBox.innerHTML += `<div class="text-[#FF2E88]"><strong>GoodDrive AI:</strong> ${response}</div>`;
 
             inputField.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // ENTER KEY SUPPORT
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("user-input").addEventListener("keypress", function (event) {
                 if (event.key === "Enter") {
@@ -131,6 +158,7 @@
                 }
             });
         });
+
     </script>
 
 </body>
