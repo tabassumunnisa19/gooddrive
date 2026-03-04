@@ -22,8 +22,8 @@
 /* ============================= */
 
 .review-card {
-  flex: 0 0 280px;
-  max-width: 280px;
+  flex: 0 0 220px;
+  max-width: 220px;
   background: rgba(0, 0, 0, 0.7);
   border: 1px solid rgba(212, 175, 55, 0.3);
   padding: 20px;
